@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { desktopResValue, smallResValue, tabletResValue, wideDesktopResValue } from '../../utils/breakpoints';
 
 const MainPage = () => {
-  const navigate = useNavigate();
-
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [clientWidth, setClientWidth] = useState(window?.innerWidth);
   const [clientHeight, setClientHeight] = useState(window?.innerHeight);
+
+  const navigate = useNavigate();
 
   const onGoToFittingRoomHandler = () => {
     navigate('fitting-room');

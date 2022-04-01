@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { smallRes } from '../../utils/breakpoints';
 
 export const MobileTopBar = styled.div`
   height: ${({ isMenu }: { isMenu: boolean }) => (
@@ -27,6 +28,10 @@ export const MobileTopBarButtonsContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 40px;
+  
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    margin-bottom: 20px;
+  }
 `;
 export const BurgerMenuContainer = styled.div`
   padding: 5px;

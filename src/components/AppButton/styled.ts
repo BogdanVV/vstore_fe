@@ -20,7 +20,7 @@ export const StyledButton = styled.button`
   letter-spacing: 0.02em;
   cursor: pointer;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     width: 79px;
     letter-spacing: 0;
     padding: 4px 0;

@@ -42,8 +42,11 @@ const FittingRoomPage = () => {
   const [isFiltersBarVisible, setIsFiltersBarVisible] = useState(false);
   const [filtersApplied, setFiltersApplied] = useState<IFilterOption[]>([]);
   const [clientWidth, setClientWidth] = useState(window?.innerWidth);
+  const [clientHeight, setClientHeight] = useState(window?.innerHeight);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileSelectedMenuCategory, setMobileSelectedMenuCategory] = useState('');
+
+  const isMobileView = clientWidth < tabletResValue || (window.screen.orientation.type === 'landscape-primary' && clientHeight < tabletResValue);
 
   const handleBasketClick = () => {
     console.log('handleBasketClick');
@@ -104,6 +107,7 @@ const FittingRoomPage = () => {
   useEffect(() => {
     const handleResize = () => {
       setClientWidth(window?.innerWidth);
+      setClientHeight(window?.innerHeight);
     };
 
     window.addEventListener('resize', handleResize);
@@ -117,7 +121,7 @@ const FittingRoomPage = () => {
 
   return (
     <PageLayout>
-      {clientWidth > tabletResValue
+      {!isMobileView
         ? (
           <TopBar>
             <TopBarTitle>AVENBECK</TopBarTitle>
@@ -174,7 +178,7 @@ const FittingRoomPage = () => {
             )}
           </NewLookContainer>
 
-          {clientWidth > tabletResValue
+          {!isMobileView
             ? (
               <ControlButtonsContainer>
                 <div>

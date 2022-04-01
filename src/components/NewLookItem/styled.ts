@@ -12,7 +12,7 @@ export const ItemPicture = styled.img`
   height: 67px;
   margin-right: 5px;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     height: 42.3px;
     margin-right: 3px;
   }
@@ -29,7 +29,7 @@ export const ItemPrice = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 19px;
   }
@@ -43,7 +43,7 @@ export const ItemTitle = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 19px;
     letter-spacing: 0;
@@ -58,7 +58,7 @@ export const ItemSize = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 16px;
     letter-spacing: 0;
@@ -73,7 +73,7 @@ export const ItemSizeValue = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 18px;
     letter-spacing: 0;
@@ -88,7 +88,7 @@ export const ItemColor = styled.div`
   letter-spacing: 0.02em;
   display: flex;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 16px;
     letter-spacing: 0;
@@ -102,7 +102,7 @@ export const ItemColorValue = styled.div`
   background-color: ${({ color }: { color: string }) => color};
   margin-left: 15px;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     margin-left: 5px;
     width: 14px;
     height: 14px;

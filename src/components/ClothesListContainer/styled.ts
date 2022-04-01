@@ -20,7 +20,7 @@ export const SpoilerTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   
-  @media(max-width: ${smallRes}) {
+  @media(max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 16px;
     line-height: 24px;
     letter-spacing: 0;
@@ -33,8 +33,8 @@ export const ClothingItemsContainer = styled.div`
   transition: height 2s ease-out;
   justify-content: space-around;
   
-  @media(max-width: ${smallRes}) {
-    grid-template-columns: repeat(auto-fill, 160px);
+  @media(max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
+    grid-template-columns: repeat(auto-fill, 168px);
   }
 `;
 export const NoClothesMessage = styled.div`

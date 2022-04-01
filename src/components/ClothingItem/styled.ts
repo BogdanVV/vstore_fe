@@ -5,7 +5,7 @@ export const ClothingItemContainer = styled.div`
   width: 220px;
   margin-bottom: 32px;
 
-  @media(max-width: ${smallRes}) {
+  @media(max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     width: 167px;
   }
 `;
@@ -29,7 +29,9 @@ export const BasketIndicator = styled.div`
   background-color: ${({ isDark }: { isDark: boolean }) => isDark ? '#434343' : 'rgba(255, 255, 255, 0.7)'};
 `;
 export const ClothingImage = styled.img`
-  
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    height: 162px;
+  }
 `;
 export const ClothingInfoContainer = styled.div`
   padding: 7px 13px 13px 13px;
@@ -45,7 +47,7 @@ export const ClothingTitle = styled.div`
   letter-spacing: 0.02em;
   margin-bottom: 3px;
   
-  @media(max-width: ${smallRes}) {
+  @media(max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 15px;
   }
@@ -69,7 +71,7 @@ export const SizeContainer = styled.div`
   position: relative;
   height: 40px;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     padding: 0 7px;
   }
 `;
@@ -81,7 +83,7 @@ export const SizeText = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   
-  @media(max-width: ${smallRes}) {
+  @media(max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 21px;
   }
@@ -98,7 +100,7 @@ export const ClothingChosenValue = styled.div`
   justify-content: center;
   flex-wrap: nowrap;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 21px;
     letter-spacing: 0;
@@ -173,7 +175,7 @@ export const SizeOptionValue = styled.div`
 export const ArrowIcon = styled.img`
   display: inline;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     height: 4.5px;
   }
 `;
@@ -188,7 +190,7 @@ export const SelectColorContainerTitle = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 14px;
     line-height: 21px;
     letter-spacing: 0;
@@ -222,10 +224,9 @@ export const AvailableColor = styled.div`
     } else {
       return 'none';
     }
-    //isSelected ? '2px solid #717171' : 'none'
   }};
   
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     width: 14px;
     height: 14px;
   }

@@ -18,12 +18,19 @@ export const PageLayout = styled.div`
   grid-template-rows: 80px 1fr;
   grid-template-columns: 1fr;
   overflow: hidden;
-  
-  @media(max-width: ${smallRes}) {
+
+  @media (max-width: ${smallRes}) {
     display: block;
     background-position-x: 39%;
     background-position-y: 81%;
     background-size: 1765px;
+  }
+
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    display: block;
+    background-position-x: 36%;
+    background-position-y: 65%;
+    background-size: 1291px;
   }
 `;
 export const TopBar = styled.div`
@@ -33,7 +40,7 @@ export const TopBar = styled.div`
   justify-content: space-between;
   padding: 0 24px 0 60px;
 
-  @media(max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     display: none;
   }
 `;
@@ -56,7 +63,7 @@ export const ContentContainer = styled.div`
   grid-template-rows: 1fr;
   overflow: auto;
 
-  @media(max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     grid-template-columns: 0fr 1fr 0fr;
   }
 
@@ -70,17 +77,18 @@ export const LeftContainer = styled.div`
   )};
   overflow: auto;
   flex: 17;
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
 `;
 export const MiddleContainer = styled.div`
   flex: 40;
   display: flex;
   justify-content: space-between;
-  overflow: auto;
+  //overflow: auto;
 `;
 export const RightContainer = styled.div`
   flex: 43;
@@ -88,17 +96,18 @@ export const RightContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(25px);
   padding: 34px 39px 34px 60px;
-  
+
   & > * {
     backdrop-filter: blur(0);
   }
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
-  
-  @media (max-width: ${smallRes}) {
+
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     display: none;
   }
 `;
@@ -107,8 +116,8 @@ export const ControlButtonsContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding: 38px 40px 220px 0;
-  
-  @media(max-width: ${smallRes}) {
+
+  @media (max-width: ${smallRes}) {
     display: none;
   }
 `;
@@ -119,13 +128,17 @@ export const ZoomButtonsContainer = styled.div`
 `;
 export const NewLookContainer = styled.div`
   padding: 30px 20px 20px 30px;
-  
+
   @media (max-width: ${smallRes}) {
     padding: 60px 0 13px 20px;
   }
+
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    padding: 26px 0 13px 20px;
+  }
 `;
 export const NewLookWrapper = styled.div`
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     position: relative;
     z-index: 1;
   }
@@ -138,8 +151,8 @@ export const NewLookContainerTitle = styled.div`
   letter-spacing: 0.02em;
   color: #FFF;
   margin-bottom: 16px;
-  
-  @media (max-width: ${smallRes}) {
+
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 16px;
     font-weight: 700;
     line-height: 19px;
@@ -153,15 +166,23 @@ export const NewLookItemsContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   overflow: auto;
+
   &::-webkit-scrollbar {
     display: none;
   }
+
   -ms-overflow-style: none;
   max-height: 300px;
-  
+
   @media (max-width: ${smallRes}) {
     gap: 10px;
     max-height: 90px;
+    margin-bottom: 13px;
+  }
+
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    gap: 10px;
+    max-height: 120px;
     margin-bottom: 13px;
   }
 `;
@@ -171,7 +192,7 @@ export const TotalCostSection = styled.div`
 export const TotalCostDivider = styled.div`
   border-bottom: 1.4px solid #FFF;
   margin-bottom: 16px;
-  
+
   @media (max-width: ${smallRes}) {
     margin-bottom: 11px;
     border-bottom: 1px solid #FFF;
@@ -184,8 +205,8 @@ export const TotalCostSectionInfo = styled.div`
   line-height: 27px;
   letter-spacing: 0.02em;
   padding-bottom: 16px;
-  
-  @media (max-width: ${smallRes}) {
+
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     font-size: 12px;
     padding-bottom: 11px;
   }
@@ -193,17 +214,23 @@ export const TotalCostSectionInfo = styled.div`
 
 // MOBILE
 export const MobileControlButtonsContainer = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 `;
 export const MobileZoomButtonsContainer = styled.div`
   @media (max-width: ${smallRes}) {
     position: absolute;
     left: 20px;
     bottom: 28%;
+  }
+  
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    position: absolute;
+    left: 255px;
+    bottom: 46px;
   }
 `;
 export const MobileSelectClothesButtonsContainer = styled.div`
@@ -212,9 +239,15 @@ export const MobileSelectClothesButtonsContainer = styled.div`
     bottom: 4.5%;
     right: 23px;
   }
+  
+  @media (orientation: landscape) and (max-height: ${smallRes}) {
+    position: absolute;
+    bottom: 4.5%;
+    right: 23px;
+  }
 `;
 export const MobileSelectClothesButton = styled.button`
-  @media (max-width: ${smallRes}) {
+  @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     border: none;
     width: 221px;
     background-color: #FFF;

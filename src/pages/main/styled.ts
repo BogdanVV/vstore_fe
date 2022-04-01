@@ -11,21 +11,23 @@ export const PageLayout = styled.div`
   background-position: center;
   background-size: cover;
   position: relative;
-  
+
   @media (max-width: ${smallRes}) {
     overflow: hidden;
     background-position: 62% center;
   }
-  
+
   @media (orientation: landscape) and (max-height: ${smallRes}) {
-  background-position: center 0;
-}
+    background-position-x: left;
+    background-position-y: 0;
+    background-size: 100%;
+  }
 `;
 export const ButtonsContainer = styled.div`
   position: absolute;
   right: 19px;
   top: 49px;
-  
+
   @media (max-width: ${smallRes}) {
     right: 10px;
     top: 60px;
@@ -51,7 +53,7 @@ export const NavigationButton = styled.button`
   line-height: 27px;
   letter-spacing: 0.02em;
   cursor: pointer;
-  
+
   @media (max-width: ${smallRes}), (orientation: landscape) and (max-height: ${smallRes}) {
     width: 221px;
     padding: 12px 0;
