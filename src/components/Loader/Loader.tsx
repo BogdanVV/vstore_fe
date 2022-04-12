@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoaderContainer, LoaderContainerLayout, LoaderIcon } from './styled';
-import loadingSpinner2 from '../../assets/loaders/oval.svg';
+import loadingSpinner2 from '../../assets/loaders/preloader.svg';
 
 const Loader = () => {
   return (
