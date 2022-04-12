@@ -1,5 +1,14 @@
 import blackHoodieImg from '../assets/images/black-hoody.png';
-import { IClothingItem } from '../components/ClothesListContainer/types';
+
+export interface IClothingItem {
+  id: string | number;
+  title: string;
+  size: string;
+  price: number;
+  isInBasket: boolean;
+  image: string;
+  color: string;
+}
 
 export const filterCategories = [
   {
@@ -14,11 +23,11 @@ export const filterCategories = [
     title: 'CATEGORIES',
     isSearch: false,
     options: [
-      { title: 'Lorem ipsum 1', value: 'loremIpsum1' },
+      { title: 'Lorem ipsum 1 Lorem ipsum 1', value: 'loremIpsum1' },
       { title: 'Lorem ipsum 2', value: 'loremIpsum2' },
-      { title: 'Lorem ipsum 3', value: 'loremIpsum3' },
+      { title: 'Lorem ipsum 3Lorem ipsum 3 fjdskf fwj k', value: 'loremIpsum3' },
       { title: 'Lorem ipsum 4', value: 'loremIpsum4' },
-      { title: 'Lorem ipsum 5', value: 'loremIpsum5' },
+      { title: 'Lorem ipsum 5 Lorem ipsum 5', value: 'loremIpsum5' },
       { title: 'Lorem ipsum 6', value: 'loremIpsum6' },
     ],
   },
@@ -140,6 +149,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: false,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 2,
@@ -148,6 +158,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: true,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 3,
@@ -156,6 +167,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: false,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 4,
@@ -164,6 +176,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: true,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 5,
@@ -172,6 +185,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: false,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 6,
@@ -180,6 +194,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: false,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 7,
@@ -188,6 +203,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: false,
     image: blackHoodieImg,
+    color: '#161616',
   },
   {
     id: 8,
@@ -196,6 +212,7 @@ export const clothesList: IClothingItem[] = [
     price: 29.25,
     isInBasket: false,
     image: blackHoodieImg,
+    color: '#161616',
   },
 ];
 
@@ -204,7 +221,7 @@ export const availableClothesColors = [
   '#7781DB',
   '#E4DC0B',
   '#FFFFFF',
-  // '#6F9E49',
+  '#6F9E49',
   // '#F56D91',
   // '#FF6B6B',
   // '#557B83',

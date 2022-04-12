@@ -41,11 +41,6 @@ const FilterCategory = (props: IFilterCategoryProps) => {
             src={searchIcon}
           />
         </SearchInputContainer>
-
-        // <div style={{border:'2px solid green',display:'flex',width:'80%',justifyContent:'space-between'}}>
-        //   <input style={{border:'2px solid red',flex:1}}/>
-        //   <div>X</div>
-        // </div>
       )}
 
       <FilterOptionsContainer>

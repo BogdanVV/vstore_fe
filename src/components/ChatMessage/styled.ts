@@ -1,21 +1,42 @@
 import styled from 'styled-components';
-import { smallRes } from '../../utils/breakpoints';
 
 export const ChatMessageContainer = styled.div`
   padding: 8px 19px;
   background-color: #FFF;
-  font-size: 18px;
-  line-height: 27px;
+  font-size: 14px;
+  line-height: 21px;
   letter-spacing: 0.02em;
-  margin-bottom: 19px;
+  margin-top: 17px;
+  margin-bottom: 17px;
   border-radius: 15px;
   align-self: ${({ fromCustomer }: { fromCustomer: boolean }) => fromCustomer ? 'flex-end' : 'flex-start'};
   position: relative;
   max-width: 80%;
   
-  @media(max-width: ${smallRes}) {
-    font-size: 14px;
-    line-height: 21px;
+  @media (orientation: portrait) {
+    @media (min-width: 576px) {
+      font-size: 18px;
+      line-height: 27px;
+    }
+    @media (min-width: 768px) {
+      font-size: 16px;
+      line-height: 22px;
+    }
+    @media (min-width: 835px) {
+      font-size: 18px;
+      line-height: 27px;
+    }
+  }
+  
+  @media (orientation: landscape) {
+    @media (min-width: 813px) {
+      font-size: 16px;
+      line-height: 22px;
+    }
+    @media (min-width: 1195px) {
+      font-size: 18px;
+      line-height: 27px;
+    }
   }
 `;
 export const DialogueTail = styled.div`

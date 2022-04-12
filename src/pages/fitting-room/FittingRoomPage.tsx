@@ -1,68 +1,99 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 
-import AppButtonRound from '../../components/AppButtonRound/AppButtonRound';
-import AppButton from '../../components/AppButton/AppButton';
-import NewLookItem from '../../components/NewLookItem/NewLookItem';
-import ClothesListContainer from '../../components/ClothesListContainer/ClothesListContainer';
 import { clothesList, filterCategories, newLookItems } from '../../temp/mockData';
+import ClothingItem from '../../components/ClothingItem/ClothingItem';
 import FilterCategory from '../../components/FilterCategory/FilterCategory';
 import { IFilterOption } from '../../components/FilterOption/types';
-import { tabletResValue } from '../../utils/breakpoints';
 
 import {
-  Basket,
+  PageWrapper,
+  ExitFitRoomButtonContainer,
+  HeaderContainer,
   ContentContainer,
-  ControlButtonsContainer,
-  LeftContainer,
-  MiddleContainer,
-  MobileControlButtonsContainer,
-  MobileSelectClothesButton,
-  MobileSelectClothesButtonsContainer,
-  MobileZoomButtonsContainer,
+  LeftContentContainer,
+  MiddleContentContainer,
+  RightContentContainer,
   NewLookContainer,
+  ControlButtonsContainer,
+  ClothesListButtonsContainer,
   NewLookContainerTitle,
   NewLookItemsContainer,
-  NewLookWrapper,
-  PageLayout,
-  RightContainer,
-  TopBar,
-  TopBarTitle,
-  TotalCostDivider,
-  TotalCostSection,
-  TotalCostSectionInfo,
-  ZoomButtonsContainer,
+  NewLookItem,
+  NewLookImage,
+  NewLookItemInfoContainer,
+  NewLookTitlePriceContainer,
+  NewLookItemTitle,
+  NewLookItemPrice,
+  NewLookItemSizeContainer,
+  NewLookItemSizeValue,
+  NewLookItemColorContainer,
+  NewLookItemColor,
+  NewLookTotalCost,
+  NewLookTotalCostValue,
+  ButNowButton,
+  ExitButtonContainer,
+  ZoomControlButtonsContainer,
+  SelectClothesListButton,
+  MobileListContainer,
+  MobileHeaderContainer,
+  MobileMenuIcon,
+  MobListTitle,
+  MobClothesItemsContainer,
+  EmptyClothesListMessage,
+  MobHeaderButtonsContainer,
+  HeaderTitle,
+  BasketIcon,
+  ClothesListWrapper,
+  ClothesListTitle,
+  ClothesItemsContainer,
+  ClothesListTitleContainer,
+  ViewAllClothesButton,
+  FiltersContainer,
 } from './styled';
+import backgroundImage from '../../assets/images/fitting-room-background.jpg';
 import basketIcon from '../../assets/icons/basket.svg';
+import backArrowIcon from '../../assets/icons/back.svg';
+import menuIcon from '../../assets/icons/burgerMenu.svg';
 import exitArrowIcon from '../../assets/icons/exitArrow.svg';
 import zoomOutIcon from '../../assets/icons/zoomOut.svg';
 import zoomInIcon from '../../assets/icons/zoomIn.svg';
-import MobileFittingRoomTopBar from '../../components/MobileFittingRoomTopBar/MobileFittingRoomTopBar';
+import RoundButton from '../../components/RoundButton/RoundButton';
+import Loader from '../../components/Loader/Loader';
 
-const FittingRoomPage = () => {
-  const [isFiltersBarVisible, setIsFiltersBarVisible] = useState(false);
-  const [filtersApplied, setFiltersApplied] = useState<IFilterOption[]>([]);
-  const [clientWidth, setClientWidth] = useState(window?.innerWidth);
-  const [clientHeight, setClientHeight] = useState(window?.innerHeight);
+type SelectedClothesCategory = 'ALL CLOTHES' | 'SELECTED CLOTHES' | '';
+
+const TestPage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileSelectedMenuCategory, setMobileSelectedMenuCategory] = useState('');
+  const [selectedClothesList, setSelectedClothesList] = useState<SelectedClothesCategory>('ALL CLOTHES');
+  const [isAllClothesListExpanded, setIsAllClothesListExpanded] = useState(false);
+  const [filtersApplied, setFiltersApplied] = useState<IFilterOption[]>([]);
+  const [isBackgroundImageLoaded, setIsBackgroundImageLoaded] = useState(false);
 
-  const isMobileView = clientWidth < tabletResValue || (window.screen.orientation.type === 'landscape-primary' && clientHeight < tabletResValue);
+  const pageLayoutRef: RefObject<HTMLDivElement> = createRef();
 
-  const handleBasketClick = () => {
-    console.log('handleBasketClick');
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(prev => !prev);
   };
 
-  const handleExitArrowClick = () => {
-    console.log('handleExitArrowClick');
+  const handleExitFitRoomButtonClick = () => {
     window.history.back();
   };
 
   const handleZoomInClick = () => {
-    console.log('handleZoomInClick');
+    console.log('handleZoomInClick')
   };
 
   const handleZoomOutClick = () => {
-    console.log('handleZoomOutClick');
+    console.log('handleZoomOutClick')
+  };
+
+  const onSelectClothesCategory = (category: SelectedClothesCategory) => {
+    setSelectedClothesList(category);
+    toggleMobileMenu();
+  };
+
+  const toggleAllClothesList = () => {
+    setIsAllClothesListExpanded(prev => !prev);
   };
 
   const handleOptionPick = (option: IFilterOption) => {
@@ -73,189 +104,189 @@ const FittingRoomPage = () => {
     }
   };
 
-  const handleMobileSelectedClothesButtonPress = () => {
-    setIsMobileMenuOpen(true);
-    setMobileSelectedMenuCategory('selectedClothes');
-  };
-
-  const handleMobileAllClothesButtonPress = () => {
-    setIsMobileMenuOpen(true);
-    setMobileSelectedMenuCategory('allClothes');
-  };
-
   const handleSearchTextChange = (searchQuery: string) => {
     console.log(searchQuery);
   };
 
-  const handleBuyNowClick = () => {
-    console.log('handleBuyNowClick');
-  };
-
-  const toggleFiltersBar = () => {
-    setIsFiltersBarVisible(prevState => !prevState);
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(prevState => !prevState);
-  };
-
-  const handleMobileMenuBackButtonClick = () => {
-    setMobileSelectedMenuCategory('');
-    setIsMobileMenuOpen(false);
-  };
-
   useEffect(() => {
-    const handleResize = () => {
-      setClientWidth(window?.innerWidth);
-      setClientHeight(window?.innerHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    handleResize();
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    };
+    // loader handler
+    const bgImage = new Image();
+    bgImage.src = backgroundImage;
+    bgImage.onload = (e) => {
+      if (pageLayoutRef.current) {
+        pageLayoutRef.current.style.backgroundImage = `url(${backgroundImage})`;
+      }
+      setIsBackgroundImageLoaded(true);
+    }
   }, []);
 
   return (
-    <PageLayout>
-      {!isMobileView
-        ? (
-          <TopBar>
-            <TopBarTitle>AVENBECK</TopBarTitle>
-            <Basket
-              onClick={handleBasketClick}
-              src={basketIcon}
-            />
-          </TopBar>
-        )
-        : (
-          <MobileFittingRoomTopBar
-            isMobileMenuOpen={isMobileMenuOpen}
-            toggleMobileMenu={toggleMobileMenu}
-            mobileSelectedMenuCategory={mobileSelectedMenuCategory}
-            handleMobileMenuBackButtonClick={handleMobileMenuBackButtonClick}
-          />
-        )}
-      <ContentContainer isFiltersBarVisible={isFiltersBarVisible}>
-        <LeftContainer isFiltersBarVisible={isFiltersBarVisible}>
-          {filterCategories.map(category => (
-            <FilterCategory
-              filtersApplied={filtersApplied}
-              key={category.title}
-              title={category.title}
-              options={category.options}
-              handleOptionPick={handleOptionPick}
-              isSearch={category.isSearch}
-              searchOnChangeHandler={handleSearchTextChange}
-            />
-          ))}
-        </LeftContainer>
+    <PageWrapper ref={pageLayoutRef}>
+      <ExitFitRoomButtonContainer>
+        <RoundButton
+          icon={exitArrowIcon}
+          onClick={handleExitFitRoomButtonClick}
+        />
+      </ExitFitRoomButtonContainer>
 
-        <MiddleContainer>
-          <NewLookContainer>
-            {newLookItems.length > 0 && (
-              <NewLookWrapper>
+      <MobileListContainer isOpen={isMobileMenuOpen}>
+        <MobileHeaderContainer>
+          <MobHeaderButtonsContainer>
+            <MobileMenuIcon src={menuIcon} alt="menu" />
+            <RoundButton
+              icon={backArrowIcon}
+              onClick={toggleMobileMenu}
+            />
+          </MobHeaderButtonsContainer>
+        </MobileHeaderContainer>
+        <MobListTitle>{selectedClothesList}</MobListTitle>
+        <MobClothesItemsContainer>
+          {clothesList.length === 0
+            ? (
+              <EmptyClothesListMessage>
+                {selectedClothesList === 'ALL CLOTHES'
+                  ? 'No selected clothes yet...'
+                  : 'No clothes found'}
+              </EmptyClothesListMessage>
+            )
+            : clothesList.map(clothing => (
+              <ClothingItem key={clothing.id} clothing={clothing} />
+            ))}
+        </MobClothesItemsContainer>
+      </MobileListContainer>
+
+      {!isBackgroundImageLoaded
+        ? <Loader />
+        : (
+          <ContentContainer isFiltersBar={isAllClothesListExpanded}>
+            <HeaderContainer isTransparent={isMobileMenuOpen}>
+              <HeaderTitle>AVENBECK</HeaderTitle>
+              <BasketIcon src={basketIcon} alt="basket" />
+            </HeaderContainer>
+
+            <LeftContentContainer>
+              <FiltersContainer>
+                {filterCategories.map(category => (
+                  <FilterCategory
+                    filtersApplied={filtersApplied}
+                    key={category.title}
+                    title={category.title}
+                    options={category.options}
+                    handleOptionPick={handleOptionPick}
+                    isSearch={category.isSearch}
+                    searchOnChangeHandler={handleSearchTextChange}
+                  />
+                ))}
+              </FiltersContainer>
+            </LeftContentContainer>
+
+            <MiddleContentContainer>
+              <NewLookContainer isFiltersBar={isAllClothesListExpanded}>
                 <NewLookContainerTitle>NEW LOOK</NewLookContainerTitle>
                 <NewLookItemsContainer>
                   {newLookItems.map(item => (
-                    <NewLookItem key={item.id} newLookItem={item}/>
+                    <NewLookItem key={item.id}>
+                      <NewLookImage src={item.image} />
+                      <NewLookItemInfoContainer>
+                        <NewLookTitlePriceContainer>
+                          <NewLookItemTitle>{item.title}</NewLookItemTitle>
+                          <NewLookItemPrice>$ {item.price}</NewLookItemPrice>
+                        </NewLookTitlePriceContainer>
+                        <NewLookItemSizeContainer>
+                          Size: <NewLookItemSizeValue>{item.size}</NewLookItemSizeValue>
+                        </NewLookItemSizeContainer>
+                        <NewLookItemColorContainer>
+                          Selected color: <NewLookItemColor color={item.color} />
+                        </NewLookItemColorContainer>
+                      </NewLookItemInfoContainer>
+                    </NewLookItem>
                   ))}
                 </NewLookItemsContainer>
-                <TotalCostSection>
-                  <TotalCostSectionInfo>TOTAL COST</TotalCostSectionInfo>
-                  <TotalCostDivider/>
-                  <TotalCostSectionInfo>$ XXX.XXX</TotalCostSectionInfo>
-                  <AppButton
-                    title="BUY NOW"
-                    width={114}
-                    onClick={handleBuyNowClick}
-                  />
-                </TotalCostSection>
-              </NewLookWrapper>
-            )}
-          </NewLookContainer>
-
-          {!isMobileView
-            ? (
+                <NewLookTotalCost>TOTAL COST</NewLookTotalCost>
+                <NewLookTotalCostValue>$ XXX.XXX</NewLookTotalCostValue>
+                <ButNowButton>BUY NOW</ButNowButton>
+              </NewLookContainer>
               <ControlButtonsContainer>
-                <div>
-                  <AppButtonRound
-                    isOutlined={false}
+                <ExitButtonContainer>
+                  <RoundButton
                     icon={exitArrowIcon}
-                    onClick={handleExitArrowClick}
+                    onClick={handleExitFitRoomButtonClick}
+                    isSemiTransparent
                   />
-                </div>
-                <ZoomButtonsContainer>
-                  <AppButtonRound
-                    isOutlined={false}
+                </ExitButtonContainer>
+                <ZoomControlButtonsContainer>
+                  <RoundButton
                     icon={zoomOutIcon}
                     onClick={handleZoomOutClick}
+                    isSemiTransparent
                   />
-                  <AppButtonRound
-                    isOutlined={false}
+                  <RoundButton
                     icon={zoomInIcon}
                     onClick={handleZoomInClick}
+                    isSemiTransparent
                   />
-                </ZoomButtonsContainer>
+                </ZoomControlButtonsContainer>
               </ControlButtonsContainer>
-            )
-            : (
-              <MobileControlButtonsContainer>
-                <AppButtonRound
-                  icon={exitArrowIcon}
-                  onClick={handleExitArrowClick}
-                  isOutlined={false}
-                  isPositionAbsolute
-                  top="23px"
-                  right="10px"
-                />
-                <MobileZoomButtonsContainer>
-                  <AppButtonRound
-                    icon={zoomOutIcon}
-                    onClick={handleZoomOutClick}
-                    isOutlined={false}
-                    margin="0 0 18px 0"
-                  />
-                  <AppButtonRound
-                    icon={zoomInIcon}
-                    onClick={handleZoomInClick}
-                    isOutlined={false}
-                  />
-                </MobileZoomButtonsContainer>
-                <MobileSelectClothesButtonsContainer>
-                  <MobileSelectClothesButton
-                    onClick={handleMobileSelectedClothesButtonPress}
-                    margin="0 0 20px"
+              <ClothesListButtonsContainer>
+                <SelectClothesListButton
+                  onClick={() => onSelectClothesCategory('SELECTED CLOTHES')}
+                >
+                  SELECTED CLOTHES
+                </SelectClothesListButton>
+                <SelectClothesListButton
+                  onClick={() => onSelectClothesCategory('ALL CLOTHES')}
+                >
+                  ALL CLOTHES
+                </SelectClothesListButton>
+              </ClothesListButtonsContainer>
+            </MiddleContentContainer>
+
+            <RightContentContainer>
+              <ClothesListWrapper>
+                <ClothesListTitleContainer>
+                  <ClothesListTitle>SELECTED CLOTHES</ClothesListTitle>
+                </ClothesListTitleContainer>
+                <ClothesItemsContainer>
+                  {clothesList.length === 0
+                    ? (
+                      <EmptyClothesListMessage>
+                        No selected clothes yet...
+                      </EmptyClothesListMessage>
+                    )
+                    : clothesList.map(clothing => (
+                      <ClothingItem key={clothing.id} clothing={clothing} />
+                    ))}
+                </ClothesItemsContainer>
+              </ClothesListWrapper>
+              <ClothesListWrapper>
+                <ClothesListTitleContainer>
+                  <ClothesListTitle>ALL CLOTHES</ClothesListTitle>
+                  <ViewAllClothesButton
+                    onClick={toggleAllClothesList}
+                    isAllClothesListExpanded={isAllClothesListExpanded}
                   >
-                    SELECTED CLOTHES
-                  </MobileSelectClothesButton>
-                  <MobileSelectClothesButton onClick={handleMobileAllClothesButtonPress}>
-                    ALL CLOTHES
-                  </MobileSelectClothesButton>
-                </MobileSelectClothesButtonsContainer>
-              </MobileControlButtonsContainer>
-            )}
+                    {isAllClothesListExpanded ? 'HIDE ALL' : 'VIEW ALL'}
+                  </ViewAllClothesButton>
+                </ClothesListTitleContainer>
+                <ClothesItemsContainer isListCollapsed={!isAllClothesListExpanded}>
+                  {clothesList.length === 0
+                    ? (
+                      <EmptyClothesListMessage>
+                        No clothes found
+                      </EmptyClothesListMessage>
+                    )
+                    : clothesList.map(clothing => (
+                      <ClothingItem key={clothing.id} clothing={clothing} />
+                    ))}
+                </ClothesItemsContainer>
+              </ClothesListWrapper>
+            </RightContentContainer>
+          </ContentContainer>
+        )
+      }
 
-        </MiddleContainer>
-
-        <RightContainer>
-          <ClothesListContainer
-            spoilerTitle="SELECTED CLOTHES"
-            clothesList={clothesList}
-          />
-          <ClothesListContainer
-            spoilerTitle="ALL CLOTHES"
-            clothesList={clothesList}
-            toggleFiltersBar={toggleFiltersBar}
-          />
-        </RightContainer>
-
-      </ContentContainer>
-    </PageLayout>
+    </PageWrapper>
   );
 };
 
-export default FittingRoomPage;
+export default TestPage;

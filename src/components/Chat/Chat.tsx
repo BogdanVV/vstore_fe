@@ -1,17 +1,18 @@
 import React from 'react';
 import {
-  ArrowDownIcon,
   ChatContainer,
   ChatContentContainer,
-  ChatHeader, ChatWrapper,
+  ChatDefaultQuestionsContainer,
+  ChatHeaderContainer,
+  ChatHideButton,
+  ChatHideButtonIcon,
+  ChatMessagesContainer,
+  ChatWrapper,
   ConsultantAvatar,
-  ConsultantAvatarContainer,
   ConsultantInfoContainer,
   ConsultantName,
   ConsultantPost,
-  DefaultQuestion,
-  DefaultQuestionsContainer, HideButton,
-  MessagesContainer
+  DefaultQuestion
 } from './styled';
 
 import randomGuy from '../../assets/images/randomGuy.png';
@@ -58,22 +59,18 @@ const Chat = (props: IChatProps) => {
   return (
     <ChatContainer isVisible={isVisible}>
       <ChatWrapper>
-        <HideButton onClick={visibilityHandler}>
-          <ArrowDownIcon width={17} src={arrowDownIcon}/>
-        </HideButton>
-        <ChatHeader>
-          <ConsultantAvatarContainer>
-            <ConsultantAvatar
-              src={randomGuy}
-            />
-          </ConsultantAvatarContainer>
+        <ChatHideButton onClick={visibilityHandler}>
+          <ChatHideButtonIcon src={arrowDownIcon} />
+        </ChatHideButton>
+        <ChatHeaderContainer>
+          <ConsultantAvatar src={randomGuy} />
           <ConsultantInfoContainer>
-            <ConsultantName>NAME SURNAME</ConsultantName>
+            <ConsultantName>DONALD TRUMP</ConsultantName>
             <ConsultantPost>consultant</ConsultantPost>
           </ConsultantInfoContainer>
-        </ChatHeader>
+        </ChatHeaderContainer>
         <ChatContentContainer>
-          <MessagesContainer>
+          <ChatMessagesContainer>
             {mockChatMessages.map(({content, author, createdAt}) => (
               <ChatMessage
                 message={content}
@@ -81,8 +78,8 @@ const Chat = (props: IChatProps) => {
                 key={+createdAt}
               />
             ))}
-          </MessagesContainer>
-          <DefaultQuestionsContainer>
+          </ChatMessagesContainer>
+          <ChatDefaultQuestionsContainer>
             {mockDefaultQuestions.map(question => (
               <DefaultQuestion
                 key={question}
@@ -91,7 +88,7 @@ const Chat = (props: IChatProps) => {
                 {question}
               </DefaultQuestion>
             ))}
-          </DefaultQuestionsContainer>
+          </ChatDefaultQuestionsContainer>
         </ChatContentContainer>
       </ChatWrapper>
     </ChatContainer>

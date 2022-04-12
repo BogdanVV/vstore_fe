@@ -1,4 +1,4 @@
-import { IClothingItem } from '../ClothesListContainer/types';
+import { IClothingItem } from '../../temp/mockData';
 
 export interface IClothingItemProps {
   clothing: IClothingItem;

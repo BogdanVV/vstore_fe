@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { IClothingItemProps } from './types';
+import { availableClothesColors, availableClothesSizes } from '../../temp/mockData';
+
 import {
-  ArrowIcon, AvailableColor, AvailableColorsContainer,
-  BasketIndicator, ClothingChosenValue,
+  ArrowIcon, AvailableColor, AvailableColorsContainer, BasketIcon,
+  BasketIndicator, ClothingSizeChosenValue,
   ClothingImage,
   ClothingImageContainer,
   ClothingInfoContainer,
@@ -15,7 +17,6 @@ import {
 import basketLightIcon from '../../assets/icons/basketLight.svg';
 import arrowDownIcon from '../../assets/icons/arrow-down.svg';
 import checkIcon from '../../assets/icons/check.svg';
-import { availableClothesColors, availableClothesSizes } from '../../temp/mockData';
 
 const ClothingItem = ({ clothing }: IClothingItemProps) => {
   const [selectedColor, setSelectedColor] = useState(availableClothesColors[0]);
@@ -39,7 +40,7 @@ const ClothingItem = ({ clothing }: IClothingItemProps) => {
       <ClothingImageContainer>
         <ClothingImage src={clothing.image} />
         <BasketIndicator isDark={clothing.isInBasket}>
-          <img alt="basket/check" src={clothing.isInBasket ? checkIcon : basketLightIcon} />
+          <BasketIcon alt="basket" src={clothing.isInBasket ? checkIcon : basketLightIcon} />
         </BasketIndicator>
       </ClothingImageContainer>
       <ClothingInfoContainer>
@@ -47,10 +48,10 @@ const ClothingItem = ({ clothing }: IClothingItemProps) => {
         <SizeOptionsContainer>
           <SizeContainer onClick={toggleSizesList}>
             <SizeText>Size:</SizeText>
-            <ClothingChosenValue>
+            <ClothingSizeChosenValue>
               {selectedSize}{' '}
               <ArrowIcon src={arrowDownIcon} />
-            </ClothingChosenValue>
+            </ClothingSizeChosenValue>
 
             <SizesChooseList isListVisible={isSizesListVisible}>
               {availableClothesSizes.map(size => (
@@ -65,10 +66,10 @@ const ClothingItem = ({ clothing }: IClothingItemProps) => {
             </SizesChooseList>
 
           </SizeContainer>
-          <ClothingChosenValue>$ {clothing.price}</ClothingChosenValue>
+          <ClothingSizeChosenValue>$ {clothing.price}</ClothingSizeChosenValue>
         </SizeOptionsContainer>
         <SelectColorContainer>
-          <SelectColorContainerTitle>Select Color</SelectColorContainerTitle>
+          <SelectColorContainerTitle>Select color</SelectColorContainerTitle>
           <AvailableColorsContainer>
             {availableClothesColors.map(color => (
               <AvailableColor
@@ -83,7 +84,6 @@ const ClothingItem = ({ clothing }: IClothingItemProps) => {
         </SelectColorContainer>
       </ClothingInfoContainer>
     </ClothingItemContainer>
-
   );
 };
 
