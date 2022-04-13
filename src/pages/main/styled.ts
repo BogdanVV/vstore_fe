@@ -82,6 +82,7 @@ export const ControlButtonsContainer = styled.div`
 
 `;
 export const ControlButton = styled.button`
+  cursor: pointer;
   border: none;
   width: 221px;
   height: 44px;
@@ -95,6 +96,10 @@ export const ControlButton = styled.button`
   font-size: 14px;
   font-weight: 600;
   line-height: 21px;
+  
+  :hover {
+    background-color: #E0E0E0;
+  }
   
   @media (orientation: landscape) {
     @media (min-width: 813px) {
