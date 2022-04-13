@@ -644,6 +644,7 @@ export const NewLookItemSizeValue = styled.div`
 `;
 export const NewLookItemColorContainer = styled.div`
   display: flex;
+  align-items: center;
   gap: 5px;
   font-family: Montserrat, sans-serif;
   font-size: 14px;
