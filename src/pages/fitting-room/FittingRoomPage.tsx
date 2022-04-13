@@ -59,6 +59,7 @@ import zoomOutIcon from '../../assets/icons/zoomOut.svg';
 import zoomInIcon from '../../assets/icons/zoomIn.svg';
 import RoundButton from '../../components/RoundButton/RoundButton';
 import Loader from '../../components/Loader/Loader';
+import { useNavigate } from 'react-router-dom';
 
 type SelectedClothesCategory = 'ALL CLOTHES' | 'SELECTED CLOTHES' | '';
 
@@ -70,13 +71,14 @@ const TestPage = () => {
   const [isBackgroundImageLoaded, setIsBackgroundImageLoaded] = useState(false);
 
   const pageLayoutRef: RefObject<HTMLDivElement> = createRef();
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(prev => !prev);
   };
 
   const handleExitFitRoomButtonClick = () => {
-    window.history.back();
+    navigate('/');
   };
 
   const handleZoomInClick = () => {
