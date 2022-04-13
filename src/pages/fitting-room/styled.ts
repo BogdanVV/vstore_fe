@@ -255,12 +255,26 @@ export const HeaderTitle = styled.div`
     }
   }
 `;
+export const BasketIconContainer = styled.div`
+  border-radius: 50%;
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFF;
+  cursor: pointer;
+
+  :hover {
+    background-color: #e0e0e0;
+  }
+`;
 export const BasketIcon = styled.img`
   width: 16px;
   @media (orientation: portrait) and (min-width: 835px),
   (orientation: landscape) and (min-width: 1281px) {
     width: 25px;
   }
+  
 `;
 export const LeftContentContainer = styled.div`
   overflow: hidden;
@@ -818,6 +832,11 @@ export const BuyNowButton = styled.button`
   font-weight: 700;
   line-height: 19px;
   letter-spacing: 0.02em;
+  background-color: #FFF;
+  
+  :hover {
+    background-color: #e0e0e0;
+  }
 
   @media (orientation: landscape) {
     @media (min-width: 813px) {
@@ -946,6 +965,7 @@ export const ClothesListButtonsContainer = styled.div`
   }
 `;
 export const SelectClothesListButton = styled.button`
+  cursor: pointer;
   border: none;
   width: 221px;
   height: 44px;
@@ -959,6 +979,10 @@ export const SelectClothesListButton = styled.button`
   font-size: 14px;
   font-weight: 600;
   line-height: 21px;
+  
+  :hover {
+    background-color: #e0e0e0;
+  }
 
   @media (orientation: landscape) {
     @media (min-width: 813px) {
@@ -1048,6 +1072,15 @@ export const ViewAllClothesButton = styled.div<{ isAllClothesListExpanded: boole
     isAllClothesListExpanded ? '2px solid #FFF' : '2px solid #333'
   )};
   border-radius: 2px;
+  
+  :hover {
+    color: ${({ isAllClothesListExpanded }) => (
+      isAllClothesListExpanded ? '#333' : '#FFF'
+    )};
+    border: ${({ isAllClothesListExpanded }) => (
+      isAllClothesListExpanded ? '2px solid #333' : '2px solid #FFF'
+    )};
+  }
   
   @media (orientation: landscape) {
     @media (min-width: 1195px) {

@@ -42,6 +42,7 @@ export const ClothingImageContainer = styled.div`
 `;
 export const BasketIndicator = styled.div`
   position: absolute;
+  cursor: pointer;
   top: 13px;
   right: 8px;
   width: 25px;

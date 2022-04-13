@@ -6,13 +6,19 @@ export const StyledButton = styled.button<Partial<IRoundButtonProps>>`
   height: 44px;
   border-radius: 50%;
   background-color: ${({ isSemiTransparent }) => (
-    isSemiTransparent ? 'rgba(255, 255, 255, 0.66)' : '$FFF'
+    isSemiTransparent ? 'rgba(255, 255, 255, 0.66)' : '#FFF'
   )};
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
+  
+  :hover {
+    background-color: ${({ isSemiTransparent }) => (
+      isSemiTransparent ? '#FFF' : 'rgba(255, 255, 255, 0.66)'
+    )};
+  }
   
   @media (orientation: landscape) {
     @media (min-width: 813px) {

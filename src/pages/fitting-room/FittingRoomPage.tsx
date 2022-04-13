@@ -48,7 +48,7 @@ import {
   ClothesItemsContainer,
   ClothesListTitleContainer,
   ViewAllClothesButton,
-  FiltersContainer,
+  FiltersContainer, BasketIconContainer,
 } from './styled';
 import backgroundImage from '../../assets/images/fitting-room-background.jpg';
 import basketIcon from '../../assets/icons/basket.svg';
@@ -161,7 +161,9 @@ const TestPage = () => {
           <ContentContainer isFiltersBar={isAllClothesListExpanded}>
             <HeaderContainer isTransparent={isMobileMenuOpen}>
               <HeaderTitle>AVENBECK</HeaderTitle>
-              <BasketIcon src={basketIcon} alt="basket" />
+              <BasketIconContainer>
+                <BasketIcon src={basketIcon} alt="basket" />
+              </BasketIconContainer>
             </HeaderContainer>
 
             <LeftContentContainer>
