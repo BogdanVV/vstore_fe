@@ -94,6 +94,7 @@ export const MobileListContainer = styled.div<IMobileMenuProps>`
   left: 0;
   background-color: rgba(255, 255, 255, .44);
   backdrop-filter: blur(13px);
+  -webkit-backdrop-filter: blur(13px);
   z-index: 10;
   overflow: auto;
 
