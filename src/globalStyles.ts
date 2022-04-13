@@ -52,5 +52,18 @@ export default createGlobalStyle`
   
   div {
     box-sizing: border-box;
+    
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #818181;
+      border-radius: 20px;
+    }
   }
 `;

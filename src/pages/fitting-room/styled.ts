@@ -407,12 +407,13 @@ export const NewLookContainerTitle = styled.div`
 `;
 export const NewLookItemsContainer = styled.div`
   max-height: 120px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 12px;
-  
+
   @media (orientation: landscape) {
     @media (min-width: 813px) {
       margin-bottom: 26px;
@@ -802,8 +803,9 @@ export const NewLookTotalCostValue = styled.div`
     }
   }
 `;
-export const ButNowButton = styled.button`
+export const BuyNowButton = styled.button`
   border: none;
+  cursor: pointer;
   border-radius: 2px;
   padding: 6px 11px;
   display: flex;
@@ -1032,16 +1034,18 @@ export const ClothesListTitle = styled.div`
 `;
 export const ViewAllClothesButton = styled.div<{ isAllClothesListExpanded: boolean }>`
   color: ${({ isAllClothesListExpanded }) => (
-  isAllClothesListExpanded ? '#FFF' : '#333'
-)};
+    isAllClothesListExpanded ? '#FFF' : '#333'
+  )};
+  cursor: pointer;
+
   padding: 8px 16px;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 700;
   line-height: 27px;
   border: ${({ isAllClothesListExpanded }) => (
-  isAllClothesListExpanded ? '2px solid #FFF' : '2px solid #333'
-)};
+    isAllClothesListExpanded ? '2px solid #FFF' : '2px solid #333'
+  )};
   border-radius: 2px;
   
   @media (orientation: landscape) {

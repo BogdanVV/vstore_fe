@@ -30,7 +30,7 @@ import {
   NewLookItemColor,
   NewLookTotalCost,
   NewLookTotalCostValue,
-  ButNowButton,
+  BuyNowButton,
   ExitButtonContainer,
   ZoomControlButtonsContainer,
   SelectClothesListButton,
@@ -112,7 +112,7 @@ const TestPage = () => {
     // loader handler
     const bgImage = new Image();
     bgImage.src = backgroundImage;
-    bgImage.onload = (e) => {
+    bgImage.onload = () => {
       if (pageLayoutRef.current) {
         pageLayoutRef.current.style.backgroundImage = `url(${backgroundImage})`;
       }
@@ -204,7 +204,7 @@ const TestPage = () => {
                 </NewLookItemsContainer>
                 <NewLookTotalCost>TOTAL COST</NewLookTotalCost>
                 <NewLookTotalCostValue>$ XXX.XXX</NewLookTotalCostValue>
-                <ButNowButton>BUY NOW</ButNowButton>
+                <BuyNowButton>BUY NOW</BuyNowButton>
               </NewLookContainer>
               <ControlButtonsContainer>
                 <ExitButtonContainer>

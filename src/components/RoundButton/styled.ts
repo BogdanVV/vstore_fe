@@ -12,6 +12,7 @@ export const StyledButton = styled.button<Partial<IRoundButtonProps>>`
   align-items: center;
   justify-content: center;
   border: none;
+  cursor: pointer;
   
   @media (orientation: landscape) {
     @media (min-width: 813px) {
