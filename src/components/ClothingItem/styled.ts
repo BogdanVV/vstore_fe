@@ -6,15 +6,24 @@ interface IAvailableColorProps {
   color: string;
 }
 
-export const ClothingItemContainer = styled.div`
+export const ClothingItemContainer = styled.div<{ isActive: boolean }>`
+  cursor: pointer;
+  height: fit-content;
   width: 168px;
+  border-radius: 2px;
+  outline: ${({ isActive }) => (
+      isActive ? '1px solid #FFFFFF' : '0'
+  )};
+  background-color: ${({ isActive }) => (
+      isActive ? 'rgba(255, 255, 255, 0.33)' : ''
+  )};
   
   @media (orientation: landscape) {
     @media (min-width: 813px) {
       width: 180px;
     }
     @media (min-width: 1195px) {
-      width: 147px;
+      width: 170px;
     }
     @media (min-width: 1281px) {
       width: 180px;
@@ -37,14 +46,20 @@ export const ClothingImageContainer = styled.div`
   background-color: rgba(117, 117, 117, 0.66);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
 `;
-export const BasketIndicator = styled.div`
+
+export const ClothingItemActions = styled.div`
   position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px;
+`
+
+export const BasketIndicator = styled.div`
   cursor: pointer;
-  top: 13px;
-  right: 8px;
   width: 25px;
   height: 25px;
   border-radius: 50%;
@@ -85,6 +100,11 @@ export const BasketIndicator = styled.div`
     }
   }
 `;
+
+export const RemoveClothingItem = styled.img`
+  cursor: pointer;
+`
+
 export const BasketIcon = styled.img`
   height: 12px;
   
@@ -141,7 +161,6 @@ export const ClothingImage = styled.img`
 export const ClothingInfoContainer = styled.div`
    padding: 8px 10px;
    background-color: #FFF;
-   margin-bottom: 3px;
   
   @media (orientation: landscape) {
     @media (min-width: 1281px) {
@@ -199,6 +218,7 @@ export const SizeOptionsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   margin-bottom: 3px;
   gap: 5px;
 `;
@@ -221,8 +241,8 @@ export const SizeContainer = styled.div`
 export const SizeText = styled.div`
   color: #333;
   font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 14px !important;
+  font-weight: 300 !important;
   line-height: 21px;
   
   @media (orientation: landscape) {
@@ -266,7 +286,7 @@ export const ClothingSizeChosenValue = styled.div`
   margin-left: 3px;
   color: #333;
   font-family: Montserrat, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 21px;
   letter-spacing: 0.02em;
@@ -328,6 +348,10 @@ export const SizeOptionContainer = styled.div`
   margin-bottom: 2px;
   cursor: pointer;
   align-items: center;
+  
+  @media (max-width: 1281px) {
+    padding: 0 10px;
+  }
 `;
 export const SizeOptionRadio = styled.div`
   min-width: 16px;
@@ -397,6 +421,7 @@ export const SizeOptionValue = styled.div`
 export const ArrowIcon = styled.img`
   display: inline;
   width: 8px;
+  margin-left: 3px;
   
   @media (orientation: landscape) {
     @media (min-width: 1729px) {

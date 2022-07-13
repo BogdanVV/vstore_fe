@@ -1,296 +1,432 @@
-import React, { createRef, RefObject, useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useDispatch, useSelector} from "react-redux";
 
-import { clothesList, filterCategories, newLookItems } from '../../temp/mockData';
+import {contentWindow} from "../../App";
+import {availableClothesColors, availableClothesSizes, clothesCategories, IClothingItem} from '../../temp/mockData';
+import {ICategory, IExtendedSubCategory} from "../../temp/types";
+import {useWindowSize} from "../../hooks/useWindowSize";
+import {
+    BasketIcon,
+    BasketIconContainer,
+    BuyNowButton,
+    ClothesItemsContainer,
+    ClothesListTitle,
+    ClothesListTitleContainer,
+    ClothesListWrapper,
+    ContentContainer,
+    ControlButtonsContainer,
+    EmptyClothesListMessage,
+    ExitButtonContainer,
+    FiltersContainer,
+    HeaderContainer,
+    HeaderTitle,
+    LeftContentContainer,
+    MiddleContentContainer,
+    NewLookContainer,
+    NewLookContainerTitle,
+    NewLookImage,
+    NewLookItem,
+    NewLookItemColor,
+    NewLookItemColorContainer,
+    NewLookItemInfoContainer,
+    NewLookItemPrice,
+    NewLookItemsContainer,
+    NewLookItemSizeContainer,
+    NewLookItemSizeValue,
+    NewLookItemTitle,
+    NewLookTitlePriceContainer,
+    NewLookTotalCost,
+    NewLookTotalCostValue,
+    PageWrapper,
+    RightContentContainer,
+    SelectClothesButtonsWrapper,
+    ViewAllClothesButton,
+} from './styled';
+import {RoutesEnum} from "../../enums/routes.enum";
+import {changeIsLoading, changeScene} from "../../store/slices/mainPageSlice";
+import {ScenesEnum} from "../../events/enums/scenes.enum";
+import {IRootState} from "../../store/types";
+
 import ClothingItem from '../../components/ClothingItem/ClothingItem';
 import FilterCategory from '../../components/FilterCategory/FilterCategory';
-import { IFilterOption } from '../../components/FilterOption/types';
-
-import {
-  PageWrapper,
-  ExitFitRoomButtonContainer,
-  HeaderContainer,
-  ContentContainer,
-  LeftContentContainer,
-  MiddleContentContainer,
-  RightContentContainer,
-  NewLookContainer,
-  ControlButtonsContainer,
-  ClothesListButtonsContainer,
-  NewLookContainerTitle,
-  NewLookItemsContainer,
-  NewLookItem,
-  NewLookImage,
-  NewLookItemInfoContainer,
-  NewLookTitlePriceContainer,
-  NewLookItemTitle,
-  NewLookItemPrice,
-  NewLookItemSizeContainer,
-  NewLookItemSizeValue,
-  NewLookItemColorContainer,
-  NewLookItemColor,
-  NewLookTotalCost,
-  NewLookTotalCostValue,
-  BuyNowButton,
-  ExitButtonContainer,
-  ZoomControlButtonsContainer,
-  SelectClothesListButton,
-  MobileListContainer,
-  MobileHeaderContainer,
-  MobileMenuIcon,
-  MobListTitle,
-  MobClothesItemsContainer,
-  EmptyClothesListMessage,
-  MobHeaderButtonsContainer,
-  HeaderTitle,
-  BasketIcon,
-  ClothesListWrapper,
-  ClothesListTitle,
-  ClothesItemsContainer,
-  ClothesListTitleContainer,
-  ViewAllClothesButton,
-  FiltersContainer, BasketIconContainer,
-} from './styled';
-import backgroundImage from '../../assets/images/fitting-room-background.jpg';
-import basketIcon from '../../assets/icons/basket.svg';
-import backArrowIcon from '../../assets/icons/back.svg';
-import menuIcon from '../../assets/icons/burgerMenu.svg';
-import exitArrowIcon from '../../assets/icons/exitArrow.svg';
-import zoomOutIcon from '../../assets/icons/zoomOut.svg';
-import zoomInIcon from '../../assets/icons/zoomIn.svg';
 import RoundButton from '../../components/RoundButton/RoundButton';
-import Loader from '../../components/Loader/Loader';
-import { useNavigate } from 'react-router-dom';
+import CategoriesHeader from "../../components/CategoriesHeader/CategoriesHeader";
+import ClothingItemLook from "../../components/ClothingItemLook";
+import switchSceneEventHandler from "../../events/SwitchScene";
 
-type SelectedClothesCategory = 'ALL CLOTHES' | 'SELECTED CLOTHES' | '';
+import basketIcon from '../../assets/icons/basket.svg';
+import exitArrowIcon from '../../assets/icons/exitArrow.svg';
 
-const TestPage = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [selectedClothesList, setSelectedClothesList] = useState<SelectedClothesCategory>('ALL CLOTHES');
-  const [isAllClothesListExpanded, setIsAllClothesListExpanded] = useState(false);
-  const [filtersApplied, setFiltersApplied] = useState<IFilterOption[]>([]);
-  const [isBackgroundImageLoaded, setIsBackgroundImageLoaded] = useState(false);
+const FittingRoomPage = () => {
+    const dispatch = useDispatch();
 
-  const pageLayoutRef: RefObject<HTMLDivElement> = createRef();
-  const navigate = useNavigate();
+    const { currentScene } = useSelector((state: IRootState) => state.mainPage);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(prev => !prev);
-  };
+    const [isAllClothesListExpanded, setIsAllClothesListExpanded] = useState(false);
+    const [activeClothingItem, setActiveClothingItem] = useState<number | null>(null);
+    const [categories, setCategories] = useState<ICategory[]>(clothesCategories);
+    const [selectedCategories, setSelectedCategories] = useState<Omit<ICategory, 'clothes'>[]>([]);
+    const [selectedClothes, setSelectedClothes] = useState<IClothingItem[]>([]);
+    const [subCategory, setSubCategory] = useState<IExtendedSubCategory | null>(selectedCategories[0]?.subCategories?.[0] ? {
+        ...selectedCategories[0]?.subCategories?.[0],
+        categoryId: selectedCategories[0]?.id
+    } : null);
+    const [isSelectedClothesCategory, setIsSelectedClothesCategory] = useState<boolean>(false);
+    const [openedClothingPopupId, setOpenedClothingPopupId] = useState<number | null>(null);
 
-  const handleExitFitRoomButtonClick = () => {
-    navigate('/');
-  };
+    const { width } = useWindowSize();
 
-  const handleZoomInClick = () => {
-    console.log('handleZoomInClick')
-  };
+    const isMobileOrTablet = width <= 1195;
 
-  const handleZoomOutClick = () => {
-    console.log('handleZoomOutClick')
-  };
+    const actionClothingInCart = (clothing: IClothingItem, add: boolean) => {
+        setSelectedClothes(oldSelectedClothes => {
+            return add ? [...oldSelectedClothes, {
+                ...clothing,
+                isInBasket: true
+            }] : [...oldSelectedClothes.filter(item => item.id !== clothing.id)];
+        });
 
-  const onSelectClothesCategory = (category: SelectedClothesCategory) => {
-    setSelectedClothesList(category);
-    toggleMobileMenu();
-  };
+        const newCategories: ICategory[] = categories.map((category) => {
+            return {
+                ...category,
+                subCategories: category.subCategories.map((subCategory) => {
+                    return {
+                        ...subCategory,
+                        clothes: subCategory.clothes.map((item) => {
+                            const isSelectedClothing = item.id === clothing.id;
 
-  const toggleAllClothesList = () => {
-    setIsAllClothesListExpanded(prev => !prev);
-  };
+                            return {
+                                ...item,
+                                isInBasket: isSelectedClothing ? add : item.isInBasket
+                            }
+                        })
+                    }
+                })
+            }
+        });
 
-  const handleOptionPick = (option: IFilterOption) => {
-    if (filtersApplied.some(filter => filter.value === option.value)) {
-      setFiltersApplied(filtersApplied.filter(f => f.value !== option.value));
-    } else {
-      setFiltersApplied(prev => [...prev, option]);
+        setCategories(newCategories);
+
+        if (subCategory) {
+            const clothes = subCategory.clothes.map((item) => {
+                if (item.id === clothing.id) {
+                    return {
+                        ...item,
+                        isInBasket: add
+                    }
+                }
+
+                return {
+                    ...item
+                }
+            });
+
+            setSubCategory({
+                ...subCategory,
+                clothes
+            })
+        }
+    };
+
+    const selectCategories = (categories: ICategory[], overwrite = true) => {
+        setSelectedCategories(overwrite ? categories : [...selectedCategories, ...categories]);
     }
-  };
 
-  const handleSearchTextChange = (searchQuery: string) => {
-    console.log(searchQuery);
-  };
+    const selectedClothesCategory =  {
+        id: 0,
+        clothes: selectedClothes,
+        subCategories: [],
+        label: 'Selected clothes',
+        value: 'Selected clothes'
+    };
 
-  useEffect(() => {
-    // loader handler
-    const bgImage = new Image();
-    bgImage.src = backgroundImage;
-    bgImage.onload = () => {
-      if (pageLayoutRef.current) {
-        pageLayoutRef.current.style.backgroundImage = `url(${backgroundImage})`;
-      }
-      setIsBackgroundImageLoaded(true);
+    const navigate = useNavigate();
+
+    const handleExitFitRoomButtonClick = () => {
+        dispatch(changeScene({ scene: ScenesEnum.STORE }));
+        dispatch(changeIsLoading({ isLoading: true }));
+
+        const switchSceneEvent = switchSceneEventHandler(ScenesEnum.STORE);
+
+        contentWindow?.dispatchEvent(switchSceneEvent);
+
+        navigate(RoutesEnum.MAIN);
+    };
+
+    const toggleAllClothesList = () => {
+        setIsAllClothesListExpanded(prev => !prev);
+    };
+
+    const handleSearchTextChange = (searchQuery: string) => {
+        console.log(searchQuery);
+    };
+
+    const fullClothesList: IClothingItem[] = categories.map((item) => {
+        const clothes: IClothingItem[] = [];
+
+        item.subCategories.forEach((subCategory) => {
+            clothes.push(...subCategory.clothes);
+        });
+
+        return clothes;
+    }).flat(2);
+
+    const handleOptionClick = (option: ICategory) => {
+        if (option.id === 0) {
+            setIsSelectedClothesCategory(true);
+            setSubCategory(null);
+        }
     }
-  }, []);
 
-  return (
-    <PageWrapper ref={pageLayoutRef}>
-      <ExitFitRoomButtonContainer>
-        <RoundButton
-          icon={exitArrowIcon}
-          onClick={handleExitFitRoomButtonClick}
-        />
-      </ExitFitRoomButtonContainer>
+    const filterCategories = [
+        {
+            title: 'CATEGORIES',
+            isSearch: false,
+            options:
+            [
+                {
+                    title: 'Selected clothes',
+                    value: 'selected clothes',
+                    id: 0
+                },
+                ...categories.map((item) => {
+                    return {
+                        title: item.label,
+                        value: item.label,
+                        subCategories: item.subCategories,
+                        id: item.id
+                    }
+                })
+            ]
+        },
+    ];
 
-      <MobileListContainer isOpen={isMobileMenuOpen}>
-        <MobileHeaderContainer>
-          <MobHeaderButtonsContainer>
-            <MobileMenuIcon src={menuIcon} alt="menu" />
-            <RoundButton
-              icon={backArrowIcon}
-              onClick={toggleMobileMenu}
-            />
-          </MobHeaderButtonsContainer>
-        </MobileHeaderContainer>
-        <MobListTitle>{selectedClothesList}</MobListTitle>
-        <MobClothesItemsContainer>
-          {clothesList.length === 0
-            ? (
-              <EmptyClothesListMessage>
-                {selectedClothesList === 'ALL CLOTHES'
-                  ? 'No selected clothes yet...'
-                  : 'No clothes found'}
-              </EmptyClothesListMessage>
-            )
-            : clothesList.map(clothing => (
-              <ClothingItem key={clothing.id} clothing={clothing} />
-            ))}
-        </MobClothesItemsContainer>
-      </MobileListContainer>
+    const onSelectedClothingFieldChange = (field: string, id: number, value: string) => {
+        const newSelectedClothes = selectedClothes.map((item) => {
+            if (item.id === id) {
+                return {
+                    ...item,
+                    [field]: value
+                }
+            }
 
-      {!isBackgroundImageLoaded
-        ? <Loader />
-        : (
-          <ContentContainer isFiltersBar={isAllClothesListExpanded}>
-            <HeaderContainer isTransparent={isMobileMenuOpen}>
-              <HeaderTitle>AVENBECK</HeaderTitle>
-              <BasketIconContainer>
-                <BasketIcon src={basketIcon} alt="basket" />
-              </BasketIconContainer>
-            </HeaderContainer>
+            return item;
+        });
 
-            <LeftContentContainer>
-              <FiltersContainer>
-                {filterCategories.map(category => (
-                  <FilterCategory
-                    filtersApplied={filtersApplied}
-                    key={category.title}
-                    title={category.title}
-                    options={category.options}
-                    handleOptionPick={handleOptionPick}
-                    isSearch={category.isSearch}
-                    searchOnChangeHandler={handleSearchTextChange}
-                  />
-                ))}
-              </FiltersContainer>
-            </LeftContentContainer>
+        setSelectedClothes(newSelectedClothes);
+    };
 
-            <MiddleContentContainer>
-              <NewLookContainer isFiltersBar={isAllClothesListExpanded}>
-                <NewLookContainerTitle>NEW LOOK</NewLookContainerTitle>
-                <NewLookItemsContainer>
-                  {newLookItems.map(item => (
-                    <NewLookItem key={item.id}>
-                      <NewLookImage src={item.image} />
-                      <NewLookItemInfoContainer>
-                        <NewLookTitlePriceContainer>
-                          <NewLookItemTitle>{item.title}</NewLookItemTitle>
-                          <NewLookItemPrice>$ {item.price}</NewLookItemPrice>
-                        </NewLookTitlePriceContainer>
-                        <NewLookItemSizeContainer>
-                          Size: <NewLookItemSizeValue>{item.size}</NewLookItemSizeValue>
-                        </NewLookItemSizeContainer>
-                        <NewLookItemColorContainer>
-                          Selected color: <NewLookItemColor color={item.color} />
-                        </NewLookItemColorContainer>
-                      </NewLookItemInfoContainer>
-                    </NewLookItem>
-                  ))}
-                </NewLookItemsContainer>
-                <NewLookTotalCost>TOTAL COST</NewLookTotalCost>
-                <NewLookTotalCostValue>$ XXX.XXX</NewLookTotalCostValue>
-                <BuyNowButton>BUY NOW</BuyNowButton>
-              </NewLookContainer>
-              <ControlButtonsContainer>
-                <ExitButtonContainer>
-                  <RoundButton
-                    icon={exitArrowIcon}
-                    onClick={handleExitFitRoomButtonClick}
-                    isSemiTransparent
-                  />
-                </ExitButtonContainer>
-                <ZoomControlButtonsContainer>
-                  <RoundButton
-                    icon={zoomOutIcon}
-                    onClick={handleZoomOutClick}
-                    isSemiTransparent
-                  />
-                  <RoundButton
-                    icon={zoomInIcon}
-                    onClick={handleZoomInClick}
-                    isSemiTransparent
-                  />
-                </ZoomControlButtonsContainer>
-              </ControlButtonsContainer>
-              <ClothesListButtonsContainer>
-                <SelectClothesListButton
-                  onClick={() => onSelectClothesCategory('SELECTED CLOTHES')}
-                >
-                  SELECTED CLOTHES
-                </SelectClothesListButton>
-                <SelectClothesListButton
-                  onClick={() => onSelectClothesCategory('ALL CLOTHES')}
-                >
-                  ALL CLOTHES
-                </SelectClothesListButton>
-              </ClothesListButtonsContainer>
-            </MiddleContentContainer>
+    const handleSubCategory = (subCategory: IExtendedSubCategory | null) => {
+        setIsSelectedClothesCategory(false);
+        setSubCategory(subCategory);
+    };
 
-            <RightContentContainer>
-              <ClothesListWrapper>
-                <ClothesListTitleContainer>
-                  <ClothesListTitle>SELECTED CLOTHES</ClothesListTitle>
-                </ClothesListTitleContainer>
-                <ClothesItemsContainer>
-                  {clothesList.length === 0
-                    ? (
-                      <EmptyClothesListMessage>
-                        No selected clothes yet...
-                      </EmptyClothesListMessage>
-                    )
-                    : clothesList.map(clothing => (
-                      <ClothingItem key={clothing.id} clothing={clothing} />
-                    ))}
-                </ClothesItemsContainer>
-              </ClothesListWrapper>
-              <ClothesListWrapper>
-                <ClothesListTitleContainer>
-                  <ClothesListTitle>ALL CLOTHES</ClothesListTitle>
-                  <ViewAllClothesButton
-                    onClick={toggleAllClothesList}
-                    isAllClothesListExpanded={isAllClothesListExpanded}
-                  >
-                    {isAllClothesListExpanded ? 'HIDE ALL' : 'VIEW ALL'}
-                  </ViewAllClothesButton>
-                </ClothesListTitleContainer>
-                <ClothesItemsContainer isListCollapsed={!isAllClothesListExpanded}>
-                  {clothesList.length === 0
-                    ? (
-                      <EmptyClothesListMessage>
-                        No clothes found
-                      </EmptyClothesListMessage>
-                    )
-                    : clothesList.map(clothing => (
-                      <ClothingItem key={clothing.id} clothing={clothing} />
-                    ))}
-                </ClothesItemsContainer>
-              </ClothesListWrapper>
-            </RightContentContainer>
-          </ContentContainer>
-        )
-      }
+    const handleAllClothesClick = () => {
+        setIsAllClothesListExpanded(true);
+        setIsSelectedClothesCategory(false);
+    };
 
-    </PageWrapper>
-  );
+    const handleSelectedClothesClick = () => {
+        setIsAllClothesListExpanded(true);
+        setIsSelectedClothesCategory(true);
+        setSubCategory(null);
+    };
+
+    useEffect(() => {
+        if (currentScene !== ScenesEnum.FITTING) {
+            const switchSceneEvent = switchSceneEventHandler(ScenesEnum.FITTING);
+
+            contentWindow?.dispatchEvent(switchSceneEvent);
+        }
+    }, [currentScene, dispatch]);
+
+    return (
+        <PageWrapper>
+            {isMobileOrTablet && <CategoriesHeader
+                selectedCategories={selectedCategories}
+                selectCategories={selectCategories}
+                categories={categories}
+                exitFittingRoom={handleExitFitRoomButtonClick}
+                selectedClothesCategory={selectedClothesCategory}
+                selectedClothes={selectedClothes}
+                activeClothingItem={activeClothingItem}
+                setActiveClothingId={setActiveClothingItem}
+                actionClothingInCart={actionClothingInCart}
+                subCategory={subCategory}
+                setSubCategory={handleSubCategory}
+            />}
+            {isMobileOrTablet && <ClothingItemLook
+                activeClothingId={activeClothingItem}
+                clothes={fullClothesList}
+            />}
+            {/*{ isMobile &&  <MobileZoomButtonsContainer>*/}
+            {/*    <RoundButton*/}
+            {/*        icon={zoomOutIcon}*/}
+            {/*        onClick={handleZoomOutClick}*/}
+            {/*        isSemiTransparent*/}
+            {/*    />*/}
+            {/*    <RoundButton*/}
+            {/*        icon={zoomInIcon}*/}
+            {/*        onClick={handleZoomInClick}*/}
+            {/*        isSemiTransparent*/}
+            {/*    />*/}
+            {/*</MobileZoomButtonsContainer> }*/}
+            {!isMobileOrTablet && <>
+                <ContentContainer isFiltersBar={isAllClothesListExpanded}>
+                    <HeaderContainer>
+                        <HeaderTitle>AVENBECK</HeaderTitle>
+                        <BasketIconContainer>
+                            <BasketIcon src={basketIcon} alt="basket"/>
+                        </BasketIconContainer>
+                    </HeaderContainer>
+
+                    <LeftContentContainer>
+                        <FiltersContainer>
+                            {filterCategories.map(category => (
+                                <FilterCategory
+                                    key={category.title}
+                                    title={category.title}
+                                    options={category.options}
+                                    handleOptionPick={handleOptionClick}
+                                    isSearch={category.isSearch}
+                                    searchOnChangeHandler={handleSearchTextChange}
+                                    nestedArrayFieldName={'subCategories'}
+                                    setSubCategory={handleSubCategory}
+                                    subCategory={subCategory}
+                                    filtersApplied={isSelectedClothesCategory ? [
+                                        {
+                                            title: 'Selected clothes',
+                                            value: 'selected clothes'
+                                        }
+                                    ] : []}
+                                />
+                            ))}
+                        </FiltersContainer>
+                    </LeftContentContainer>
+
+                    <MiddleContentContainer>
+                        <NewLookContainer
+                            isFiltersBar={isAllClothesListExpanded}
+                        >
+                            <NewLookContainerTitle>NEW LOOK</NewLookContainerTitle>
+                            <NewLookItemsContainer>
+                                {selectedClothes.map(item => (
+                                    <NewLookItem key={item.id}>
+                                        <NewLookImage src={item.image}/>
+                                        <NewLookItemInfoContainer>
+                                            <NewLookTitlePriceContainer>
+                                                <NewLookItemTitle>{item.title}</NewLookItemTitle>
+                                                <NewLookItemPrice>$ {item.price}</NewLookItemPrice>
+                                            </NewLookTitlePriceContainer>
+                                            <NewLookItemSizeContainer>
+                                                Size: <NewLookItemSizeValue>{item.size}</NewLookItemSizeValue>
+                                            </NewLookItemSizeContainer>
+                                            <NewLookItemColorContainer>
+                                                Selected color: <NewLookItemColor color={item.color}/>
+                                            </NewLookItemColorContainer>
+                                        </NewLookItemInfoContainer>
+                                    </NewLookItem>
+                                ))}
+                            </NewLookItemsContainer>
+                            <NewLookTotalCost>TOTAL COST</NewLookTotalCost>
+                            <NewLookTotalCostValue>$ XXX.XXX</NewLookTotalCostValue>
+                            <BuyNowButton>BUY NOW</BuyNowButton>
+                        </NewLookContainer>
+                        <ControlButtonsContainer>
+                            <ExitButtonContainer>
+                                <RoundButton
+                                    icon={exitArrowIcon}
+                                    onClick={handleExitFitRoomButtonClick}
+                                    isSemiTransparent
+                                />
+                            </ExitButtonContainer>
+                            {!isAllClothesListExpanded && <SelectClothesButtonsWrapper>
+                                <BuyNowButton
+                                    onClick={handleAllClothesClick}
+                                    width={'100%'}
+                                >
+                                    ALL CLOTHES
+                                </BuyNowButton>
+                                <BuyNowButton
+                                    onClick={handleSelectedClothesClick}
+                                    width={'100%'}
+                                >
+                                    SELECTED CLOTHES
+                                </BuyNowButton>
+                            </SelectClothesButtonsWrapper>}
+                        </ControlButtonsContainer>
+                    </MiddleContentContainer>
+
+                    {isAllClothesListExpanded && <RightContentContainer>
+                        {isSelectedClothesCategory ? <ClothesListWrapper>
+                            <ClothesListTitleContainer>
+                                <ClothesListTitle>SELECTED CLOTHES</ClothesListTitle>
+                            </ClothesListTitleContainer>
+                            <ClothesItemsContainer>
+                                {selectedClothes.length === 0
+                                    ? (
+                                        <EmptyClothesListMessage>
+                                            No selected clothes yet...
+                                        </EmptyClothesListMessage>
+                                    )
+                                    : selectedClothes.map(clothing => (
+                                        <ClothingItem
+                                            setOpenedClothingPopupId={setOpenedClothingPopupId}
+                                            openedClothingPopupId={openedClothingPopupId}
+                                            activeClothingId={activeClothingItem}
+                                            setActiveClothingId={setActiveClothingItem}
+                                            key={clothing.id}
+                                            clothing={clothing}
+                                            actionClothingInCart={actionClothingInCart}
+                                            color={clothing.color}
+                                            size={clothing.size}
+                                            onSizeChange={(id, size) => {
+                                                onSelectedClothingFieldChange('size', id, size);
+                                            }}
+                                            onColorChange={(id, color) => {
+                                                onSelectedClothingFieldChange('color', id, color);
+                                            }}
+                                        />
+                                    ))}
+                            </ClothesItemsContainer>
+                        </ClothesListWrapper> : <ClothesListWrapper>
+                            <ClothesListTitleContainer>
+                                <ClothesListTitle>{subCategory?.label?.toUpperCase() || 'ALL CLOTHES'}</ClothesListTitle>
+                                <ViewAllClothesButton
+                                    onClick={toggleAllClothesList}
+                                    isAllClothesListExpanded={isAllClothesListExpanded}
+                                >
+                                    {isAllClothesListExpanded ? 'HIDE ALL' : 'VIEW ALL'}
+                                </ViewAllClothesButton>
+                            </ClothesListTitleContainer>
+                            {isAllClothesListExpanded && <ClothesItemsContainer>
+                                {subCategory?.clothes?.length === 0
+                                    ? (
+                                        <EmptyClothesListMessage>
+                                            No clothes found
+                                        </EmptyClothesListMessage>
+                                    )
+                                    : subCategory?.clothes?.map(clothing => (
+                                        <ClothingItem
+                                            setOpenedClothingPopupId={setOpenedClothingPopupId}
+                                            openedClothingPopupId={openedClothingPopupId}
+                                            activeClothingId={activeClothingItem}
+                                            setActiveClothingId={setActiveClothingItem}
+                                            key={clothing.id}
+                                            clothing={clothing}
+                                            actionClothingInCart={actionClothingInCart}
+                                            color={availableClothesColors[0]}
+                                            size={availableClothesSizes[0]}
+                                        />
+                                    ))}
+                            </ClothesItemsContainer>}
+                        </ClothesListWrapper>}
+                    </RightContentContainer>}
+                </ContentContainer>
+            </>}
+        </PageWrapper>
+    );
 };
 
-export default TestPage;
+export default FittingRoomPage;

@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { IFilterOptionProps } from './types';
 import { Checkbox, CheckMark, OptionContainer, OptionTitle } from './styled';
 
 const FilterOption = (props: IFilterOptionProps) => {
   const {
     option,
-    handleOptionPick,
+    handleOptionPick = () => {},
     isChecked,
+    withCheckbox = true
   } = props;
 
   const handleOptionClick = () => {
@@ -15,10 +17,10 @@ const FilterOption = (props: IFilterOptionProps) => {
 
   return (
     <OptionContainer onClick={handleOptionClick}>
-      <Checkbox>
-        <CheckMark isChecked={isChecked} />
-      </Checkbox>
-      <OptionTitle>{option.title}</OptionTitle>
+        { withCheckbox && <Checkbox>
+            <CheckMark isChecked={isChecked} />
+        </Checkbox> }
+        <OptionTitle>{option.title}</OptionTitle>
     </OptionContainer>
   );
 };

@@ -1,0 +1,32 @@
+.actionButtonWrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+
+.actionButtonWrapper.visible {
+    display: block;
+}
+
+.actionButtonWrapper span {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    background-color: #464545b5;
+    padding: 10px 30px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.actionButtonWrapper span b {
+    display: block;
+    margin: 0 10px;
+    padding: 5px 10px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+}

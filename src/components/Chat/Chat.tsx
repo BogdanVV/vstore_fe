@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   ChatContainer,
   ChatContentContainer,
@@ -14,11 +15,12 @@ import {
   ConsultantPost,
   DefaultQuestion
 } from './styled';
+import { IChatProps } from './types';
+
+import ChatMessage from '../ChatMessage/ChatMessage';
 
 import randomGuy from '../../assets/images/randomGuy.png';
 import arrowDownIcon from '../../assets/icons/arrow-down.svg';
-import { IChatProps } from './types';
-import ChatMessage from '../ChatMessage/ChatMessage';
 
 const Chat = (props: IChatProps) => {
   const { isVisible, visibilityHandler } = props;

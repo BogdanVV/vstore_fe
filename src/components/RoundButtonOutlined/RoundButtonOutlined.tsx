@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { IRoundButtonProps } from './types';
-
 import { ButtonIcon, OuterWrapper, StyledButton } from './styled';
 
 const RoundButtonOutlined = (props: IRoundButtonProps) => {

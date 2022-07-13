@@ -29,7 +29,7 @@ export const CategoryTitle = styled.div`
 export const FilterOptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   
   @media (orientation: landscape) {
     

@@ -5,6 +5,7 @@ interface IMobileMenuProps {
 }
 
 export const PageWrapper = styled.div`
+  pointer-events: none;
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -31,8 +32,8 @@ export const PageWrapper = styled.div`
       background-size: 2020px auto;
     }
     @media (min-width: 1281px) {
-      background-position-x: 46%;
-      background-position-y: 56%;
+      background-position-x: 45%;
+      background-position-y: 50%;
       background-size: 3059px auto;
     }
     @media (min-width: 1729px) {
@@ -72,10 +73,17 @@ export const ExitFitRoomButtonContainer = styled.div`
       top: 79px;
       right: 32px;
     }
+    @media (min-width: 1195px) {
+      display: none;
+    }
   }
   
   @media (orientation: portrait) {
+    @media (max-width: 576px) {
+      display: none;
+    }
     @media (min-width: 769px) {
+      display: block;
       top: 79px;
       right: 32px;
     }
@@ -172,6 +180,7 @@ export const EmptyClothesListMessage = styled.div`
   font-size: 14px;
   line-height: 22px;
   letter-spacing: 0.02em;
+  text-align: center;
 `;
 export const ContentContainer = styled.div<{ isFiltersBar: boolean }>`
   display: grid;
@@ -198,40 +207,47 @@ export const ContentContainer = styled.div<{ isFiltersBar: boolean }>`
     @media (min-width: 1195px) {
       grid-template-rows: 54px 1fr;
       grid-template-columns: ${({ isFiltersBar }) => (
-  isFiltersBar ? '17fr 40fr 43fr' : '0fr 57fr 43fr'
-)};
+        isFiltersBar ? `17fr 40fr 43fr` : `0fr 57fr 0`
+      )};
     }
     @media (min-width: 1281px) {
       grid-template-rows: 80px 1fr;
       grid-template-columns: ${({ isFiltersBar }) => (
-  isFiltersBar ? '18.5fr 41.5fr 40fr' : '0fr 60fr 40fr'
+  isFiltersBar ? '18.5fr 41.5fr 40fr' : '0fr 60fr 0'
 )};
     }
     @media (min-width: 1729px) {
       grid-template-rows: 80px 1fr;
       grid-template-columns: ${({ isFiltersBar }) => (
-  isFiltersBar ? '17fr 40fr 43fr' : '0fr 57fr 43fr'
+  isFiltersBar ? '17fr 40fr 43fr' : '0fr 57fr 0'
 )};
     }
   }
 `;
-export const HeaderContainer = styled.div<{ isTransparent: boolean }>`
+export const HeaderContainer = styled.div`
+  pointer-events: auto;
   overflow: hidden;
   grid-column-start: 1;
   grid-column-end: 4;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: ${({ isTransparent }) => isTransparent ? 'transparent' : '#FFF'};
+  background-color: #FFFFFF;
   padding: 0 34px 0 40px;
 
   @media (orientation: landscape) {
+    @media (max-width: 1195px) {
+      display: none;
+    } 
     @media (min-width: 1281px) {
       padding: 0 32px 0 60px;
     }
   }
 
   @media (orientation: portrait) {
+    @media (max-width: 1195px) {
+      display: none;
+    }
     @media (min-width: 835px) {
       padding: 0 30px 0 60px;
     }
@@ -292,6 +308,7 @@ export const LeftContentContainer = styled.div`
   }
 `;
 export const FiltersContainer = styled.div`
+  pointer-events: auto;
   margin: 2.8% 2.9% 2.8% 18%;
   @media (orientation: landscape) {
     @media (min-width: 1281px) {
@@ -331,23 +348,13 @@ export const MiddleContentContainer = styled.div`
 `;
 export const NewLookContainer = styled.div<{ isFiltersBar: boolean }>`
   padding: 9vh 0 0 10px;
+  pointer-events: auto;
   width: 220px;
 
   @media (orientation: landscape) {
     padding-top: 7vh;
-    @media (min-width: 813px) {
-      grid-column-start: 1;
-      grid-column-end: 3;
-      width: 298px;
-      padding: 66px 0 0 38px;
-    }
-    @media (min-width: 1195px) {
-      grid-column-start: 1;
-      grid-column-end: 2;
-      width: ${({ isFiltersBar }) => isFiltersBar ? '194px' : '214px'};
-      padding: ${({ isFiltersBar }) => (
-  isFiltersBar ? '34px 0 0 20px' : '34px 0 0 40px'
-)};
+    @media (max-width: 1195px) {
+      display: none;
     }
     @media (min-width: 1281px) {
       grid-column-start: 1;
@@ -360,13 +367,8 @@ export const NewLookContainer = styled.div<{ isFiltersBar: boolean }>`
   }
   
   @media (orientation: portrait) {
-    @media (min-width: 576px) {
-      padding: 8.2vh 0 0 30px;
-      width: 361px;
-    }
-    @media (min-width: 769px) {
-      padding: 65px 0 0 38px;
-      width: 298px;
+    @media (max-width: 1195px) {
+      display: none;
     }
     @media (min-width: 835px) {
       padding: 13vh 0 0 38px;
@@ -819,7 +821,7 @@ export const NewLookTotalCostValue = styled.div`
     }
   }
 `;
-export const BuyNowButton = styled.button`
+export const BuyNowButton = styled.button<{ responsiveFontSize?: string, width?: string }>`
   border: none;
   cursor: pointer;
   border-radius: 2px;
@@ -834,6 +836,7 @@ export const BuyNowButton = styled.button`
   line-height: 19px;
   letter-spacing: 0.02em;
   background-color: #FFF;
+  width: ${props => props.width};
   
   :hover {
     background-color: #e0e0e0;
@@ -842,7 +845,7 @@ export const BuyNowButton = styled.button`
   @media (orientation: landscape) {
     @media (min-width: 813px) {
       padding: 8px 16px;
-      font-size: 16px;
+      font-size: ${props => props.responsiveFontSize || '16px'};
       line-height: 27px;
     }
     @media (min-width: 1195px) {
@@ -860,14 +863,14 @@ export const BuyNowButton = styled.button`
 
   @media (orientation: portrait) {
     @media (min-width: 576px) {
-      font-size: 16px;
+      font-size: ${props => props.responsiveFontSize || '16px'};
       font-weight: 600;
       line-height: 27px;
       padding: 10px 19px;
     }
     @media (min-width: 769px) {
       padding: 8px 16px;
-      font-size: 16px;
+      font-size: ${props => props.responsiveFontSize || '16px'};
       line-height: 27px;
       letter-spacing: 0.02em;
     }
@@ -881,7 +884,7 @@ export const ControlButtonsContainer = styled.div`
   
   @media (orientation: landscape) {
     justify-content: flex-end;
-    padding-bottom: 12vh;
+    padding-bottom: 10vh;
     @media (min-width: 813px) {
       padding: 0 0 73px 32px;
       align-items: flex-start;
@@ -893,7 +896,7 @@ export const ControlButtonsContainer = styled.div`
       justify-content: space-between;
     }
     @media (min-width: 1281px) {
-      padding: 2.1vh 30px 11.7vh 0;
+      padding: 2.1vh 30px 4vh 0;
       align-items: flex-end;
       justify-content: space-between;
     }
@@ -904,9 +907,13 @@ export const ControlButtonsContainer = styled.div`
       align-items: flex-end;
       padding: 38px 30px 382px 0;
     }
+    @media (max-width: 576px) {
+      display: none;
+    }
   }
 `;
 export const ExitButtonContainer = styled.div`
+  pointer-events: auto;
   display: none;
   @media (orientation: landscape) {
     @media (min-width: 1195px) {
@@ -953,8 +960,12 @@ export const ClothesListButtonsContainer = styled.div`
   }
 
   @media (orientation: portrait) {
+    @media (max-width: 576px) {
+      display: none;
+    }
     @media (min-width: 576px) {
       gap: 32px;
+      display: flex;
     }
     @media (min-width: 769px) {
       gap: 32px;
@@ -1034,7 +1045,7 @@ export const ClothesListWrapper = styled.div`
       margin: 3% 4.6% 3% 7.2%;
     }
     @media (min-width: 1281px) {
-      margin: 4.6% 5.3% 4.6% 8.8%;
+      margin: 4.6% 5.3% 4.6% 3%;
     }
   }
 `;
@@ -1097,6 +1108,7 @@ export const ViewAllClothesButton = styled.div<{ isAllClothesListExpanded: boole
   }
 `;
 export const ClothesListTitleContainer = styled.div`
+  pointer-events: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1115,15 +1127,15 @@ export const ClothesListTitleContainer = styled.div`
     }
   }
 `;
-export const ClothesItemsContainer = styled.div<{ isListCollapsed?: boolean }>`
-  height: ${({ isListCollapsed }) => isListCollapsed ? 0 : 'auto'};
-  overflow: hidden;
+export const ClothesItemsContainer = styled.div`
+  pointer-events: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, 180px);
   justify-content: space-between;
   grid-row-gap: 35px;
+  padding: 2px;
   
-  @media (orientation: landscape) {
+  @media (orientation: landscape) { 
     @media (min-width: 1195px) {
       grid-template-columns: repeat(auto-fill, 147px);
     }
@@ -1134,4 +1146,111 @@ export const ClothesItemsContainer = styled.div<{ isListCollapsed?: boolean }>`
       grid-template-columns: repeat(auto-fill, 220px);
     }
   }
+`;
+
+export const MobileZoomButtonsContainer = styled.div`
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+  right: 10px;
+  bottom: 150px;
+`;
+
+export const MobileCategoryClothesList = styled.div<{ $blurScroll: boolean }>`
+  position: absolute;
+  z-index: 2;
+  width: 110px;
+  height: 100vh;
+  display: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12.1px);
+  padding-top: 14px;
+  padding-bottom: 50px;
+  overflow-y: scroll;
+
+  ::after {
+    content: '';
+    display: ${({ $blurScroll }) => (
+        $blurScroll ? 'flex' : 'none'
+    )};
+    width: 100%;
+    position: sticky;
+    z-index: 999;
+    height: 60px;
+    bottom: -1px;
+    background: linear-gradient(0deg, #989898 0%, rgba(196, 196, 196, 0) 82.29%);
+    backdrop-filter: blur(4px);
+  }
+  
+  @media (max-width: 1195px) {
+    display: block !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`
+
+export const MobileCategoryClothesListTitle = styled.div`
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  color: #333333;
+  font-weight: 500;
+  padding-bottom: 14px;
+  text-transform: uppercase;
+`
+
+export const MobileCheckoutButtonWrapper = styled.div` 
+  position: absolute;
+  right: 8px;
+  bottom: 33px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  
+  @media (min-width: 1195px) {
+    display: none;
+  }
+`
+
+export const MobileCheckoutButton = styled.div`
+  padding: 6px 15px;
+  display: flex;
+  justify-content: space-between;
+  width: 220px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.66);
+`
+
+export const CheckoutTotalCost = styled.div`
+  text-transform: uppercase;
+  color: #333333;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+`
+
+export const CheckoutPriceCost = styled.div`
+  text-transform: uppercase;
+  color: #333333;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+`
+
+export const SelectClothesButtonsWrapper = styled.div`
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 `;

@@ -1,90 +1,150 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from "react-hook-form";
+
+import TSelect from "../TSelect/TSelect";
+
 import { IClothingItemProps } from './types';
-import { availableClothesColors, availableClothesSizes } from '../../temp/mockData';
-
+import { availableClothesColors, availableColorsSelectOptions } from '../../temp/mockData';
 import {
-  ArrowIcon, AvailableColor, AvailableColorsContainer, BasketIcon,
-  BasketIndicator, ClothingSizeChosenValue,
-  ClothingImage,
-  ClothingImageContainer,
-  ClothingInfoContainer,
-  ClothingItemContainer,
-  ClothingTitle, SelectColorContainer, SelectColorContainerTitle,
-  SizeContainer, SizeOptionContainer, SizeOptionRadio,
-  SizeOptionsContainer, SizeOptionValue, SizesChooseList,
-  SizeText,
+    AvailableColor, AvailableColorsContainer, BasketIcon,
+    BasketIndicator,
+    ClothingImage,
+    ClothingImageContainer,
+    ClothingInfoContainer,
+    ClothingItemContainer,
+    ClothingTitle, SelectColorContainer, SelectColorContainerTitle,
+    ClothingItemActions, RemoveClothingItem, ClothingSizeChosenValue, SizeOptionsContainer, SizeText,
 } from './styled';
+import { IOption } from "../TSelect/types";
+
 import basketLightIcon from '../../assets/icons/basketLight.svg';
-import arrowDownIcon from '../../assets/icons/arrow-down.svg';
 import checkIcon from '../../assets/icons/check.svg';
+import removeIcon from '../../assets/icons/cancel.svg';
 
-const ClothingItem = ({ clothing }: IClothingItemProps) => {
-  const [selectedColor, setSelectedColor] = useState(availableClothesColors[0]);
-  const [selectedSize, setSelectedSize] = useState(availableClothesSizes[2]);
-  const [isSizesListVisible, setIsSizesListVisible] = useState(false);
+const ClothingItem: React.FC<IClothingItemProps> = ({
+    clothing,
+    size,
+    color,
+    actionClothingInCart,
+    setActiveClothingId,
+    activeClothingId,
+    setOpenedClothingPopupId,
+    openedClothingPopupId,
+    onColorChange = () => {},
+    onSizeChange = () => {}
+}) => {
+    const {
+        setValue,
+        watch,
+        register,
+        control
+    } = useForm({
+        defaultValues: {
+            size,
+            color
+        },
+        mode: 'onTouched',
+    })
 
-  const onColorSelect = (color: string) => {
-    setSelectedColor(color);
-  };
+    const onColorSelect = (newColor: string) => {
+        setValue('color', newColor);
+        onColorChange(clothing.id, newColor);
+    };
 
-  const onSizeSelect = (size: string) => {
-    setSelectedSize(size);
-  };
+    const active = activeClothingId === clothing.id;
+    const [selectedColor, selectedSize] = watch(['color', 'size']);
 
-  const toggleSizesList = () => {
-    setIsSizesListVisible(prevState => !prevState);
-  };
+    const handleRemoveClothingItem = (e: React.MouseEvent<HTMLImageElement>) => {
+        e.stopPropagation();
+        actionClothingInCart(clothing, false);
+    }
 
-  return (
-    <ClothingItemContainer>
-      <ClothingImageContainer>
-        <ClothingImage src={clothing.image} />
-        <BasketIndicator isDark={clothing.isInBasket}>
-          <BasketIcon alt="basket" src={clothing.isInBasket ? checkIcon : basketLightIcon} />
-        </BasketIndicator>
-      </ClothingImageContainer>
-      <ClothingInfoContainer>
-        <ClothingTitle>{clothing.title}</ClothingTitle>
-        <SizeOptionsContainer>
-          <SizeContainer onClick={toggleSizesList}>
-            <SizeText>Size:</SizeText>
-            <ClothingSizeChosenValue>
-              {selectedSize}{' '}
-              <ArrowIcon src={arrowDownIcon} />
-            </ClothingSizeChosenValue>
+    const handleAddClothingItem = (e: React.MouseEvent<HTMLImageElement>) => {
+        e.stopPropagation();
+        if (!clothing.isInBasket) {
+            actionClothingInCart({
+                ...clothing,
+                size: selectedSize,
+                color: selectedColor
+            }, true);
+        }
+    };
 
-            <SizesChooseList isListVisible={isSizesListVisible}>
-              {availableClothesSizes.map(size => (
-                <SizeOptionContainer
-                  key={size}
-                  onClick={() => onSizeSelect(size)}
-                >
-                  <SizeOptionRadio isSelected={selectedSize === size} />
-                  <SizeOptionValue>{size}</SizeOptionValue>
-                </SizeOptionContainer>
-              ))}
-            </SizesChooseList>
+    const handleActiveClothingItem = () => {
+        setActiveClothingId(clothing.id);
+    };
 
-          </SizeContainer>
-          <ClothingSizeChosenValue>$ {clothing.price}</ClothingSizeChosenValue>
-        </SizeOptionsContainer>
-        <SelectColorContainer>
-          <SelectColorContainerTitle>Select color</SelectColorContainerTitle>
-          <AvailableColorsContainer>
-            {availableClothesColors.map(color => (
-              <AvailableColor
-                onClick={() => onColorSelect(color)}
-                key={color}
-                color={color}
-                isSelected={color === selectedColor}
-                isOutlined={color.toUpperCase() === '#FFF' || color.toUpperCase() === '#FFFFFF'}
-              />
-            ))}
-          </AvailableColorsContainer>
-        </SelectColorContainer>
-      </ClothingInfoContainer>
-    </ClothingItemContainer>
-  );
+    const onSizeSelect = (option: IOption | null) => {
+        onSizeChange(clothing.id, option?.value || '');
+        setOpenedClothingPopupId(null);
+    };
+
+    const handleSelectClick = () => {
+        if (openedClothingPopupId === clothing.id) {
+            setOpenedClothingPopupId(null);
+
+            return;
+        }
+
+        setOpenedClothingPopupId(clothing.id);
+    }
+
+    return (
+        <ClothingItemContainer
+            isActive={active}
+            onClick={handleActiveClothingItem}
+        >
+            <ClothingImageContainer>
+                <ClothingImage src={clothing.image}/>
+                <ClothingItemActions>
+                    <div>
+                        {clothing.isInBasket && <RemoveClothingItem
+                            src={removeIcon}
+                            alt={'remove'}
+                            onClick={handleRemoveClothingItem}
+                        />}
+                    </div>
+                    <BasketIndicator isDark={clothing.isInBasket}>
+                        <BasketIcon
+                            alt="basket"
+                            src={clothing.isInBasket ? checkIcon : basketLightIcon}
+                            onClick={handleAddClothingItem}
+                        />
+                    </BasketIndicator>
+                </ClothingItemActions>
+            </ClothingImageContainer>
+            <ClothingInfoContainer>
+                <ClothingTitle>{clothing.title}</ClothingTitle>
+                <SizeOptionsContainer>
+                    <TSelect
+                        onClick={handleSelectClick}
+                        control={control}
+                        options={availableColorsSelectOptions}
+                        name={'size'}
+                        handleNewOption={onSizeSelect}
+                        prefix={<SizeText>Size:</SizeText>}
+                        isMenuOpen={openedClothingPopupId === clothing.id}
+                    />
+                    <ClothingSizeChosenValue>$ {clothing.price}</ClothingSizeChosenValue>
+                </SizeOptionsContainer>
+                <SelectColorContainer>
+                    <SelectColorContainerTitle>Select color</SelectColorContainerTitle>
+                    <AvailableColorsContainer>
+                        {availableClothesColors.map(color => (
+                            <AvailableColor
+                                key={color}
+                                {...register('color')}
+                                onClick={() => onColorSelect(color)}
+                                color={color}
+                                isSelected={color === selectedColor}
+                                isOutlined={color.toUpperCase() === '#FFF' || color.toUpperCase() === '#FFFFFF'}
+                            />
+                        ))}
+                    </AvailableColorsContainer>
+                </SelectColorContainer>
+            </ClothingInfoContainer>
+        </ClothingItemContainer>
+    );
 };
 
 export default ClothingItem;

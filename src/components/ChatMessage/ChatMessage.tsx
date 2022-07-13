@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { ChatMessageContainer, DialogueTail } from './styled';
 import { IChatMessageProps } from './types';
 
